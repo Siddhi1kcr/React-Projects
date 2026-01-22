@@ -20,7 +20,7 @@ export class Service {
                 conf.appwriteDatabaseId,
                 conf.appwriteCollectionId,
                 slug,    
-                {title,content, featuredId, status, userId}                          
+                {title, content, featuredId, status, userId}                          
             )
         }
         catch (error) {
@@ -81,6 +81,41 @@ export class Service {
         catch (error) {
             console.log("Appwrite service :: getPosts :: error", error);   
         }
+    }
+
+    async uploadFile(file){
+        try{
+            return await this.bucket.createFile(
+                conf.appwriteBucketId,
+                ID.unique(),
+                file
+            )
+        }
+        catch (error) {
+            console.log("Appwrite service :: uploadFile :: error", error);  
+            return false; 
+        }
+    }
+
+    async deleteFile(fileId){
+        try{
+            return await this.bucket.deleteFile(
+                conf.appwriteBucketId,
+                fileId
+            );
+            return true;
+        }  
+        catch (error) {
+            console.log("Appwrite service :: deleteFile :: error", error);  
+            return false; 
+        }   
+    }
+
+    getFilePreview(fileId){
+        return this.bucket.getFilePreview(
+            conf.appwriteBucketId,
+            fileId
+        );
     }
 }
 
